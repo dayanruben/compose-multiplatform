@@ -62,6 +62,9 @@ kotlin {
             runTask {
                 // It aborts even on coroutine cancellation exceptions:
                 // d8Args.add("--abort-on-uncaught-exception")
+
+                // Makes `gc()` available, so runGC() can force a full GC between warmup and measurement.
+                d8Args.set(d8Args.get() + "--expose-gc")
             }
         }
         browser()
@@ -111,6 +114,9 @@ kotlin {
         // Intermediate source set for all Skia/Skiko targets (non-Android)
         val skikoMain by creating {
             dependsOn(commonMain)
+            dependencies {
+                implementation(project(":compose-benchmark-graphics"))
+            }
         }
 
         val desktopMain by getting {
